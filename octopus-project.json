@@ -1,0 +1,173 @@
+{
+  "Tenants": [
+    {
+      "Name": "UAT AU",
+      "Id": "Tenants-2"
+    },
+    {
+      "Name": "UAT AU #2",
+      "Id": "Tenants-81"
+    }
+  ],
+  "Environments": [
+    "Red"
+  ],
+  "Templates": [
+    {
+      "Name": "AndAnother:One",
+      "Label": "AndAnother:One",
+      "HelpText": "AndAnother:One",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "Name": "AnotherVariable",
+      "Label": "This is another variable",
+      "HelpText": "sdf!",
+      "DefaultValue": "df",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "Name": "AppInsightsConnectionString",
+      "Label": "AppInsightsConnectionString",
+      "HelpText": "AppInsightsConnectionString",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "Name": "DummyVar",
+      "Label": "DummyVar",
+      "HelpText": "DummyVar",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "Name": "GuidedBuyingApiUrl",
+      "Label": "GuidedBuyingApiUrl",
+      "HelpText": "GuidedBuyingApiUrl",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "Name": "IdentityServerClientSecret",
+      "Label": "IdentityServerClientSecret",
+      "HelpText": "IdentityServerClientSecret",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      },
+      "DefaultValue": "",
+      "HelpText": "IdentityServerUrl",
+      "Label": "IdentityServerUrl",
+      "Name": "IdentityServerUrl"
+    },
+    {
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      },
+      "DefaultValue": "",
+      "HelpText": "IdentityServerUrl",
+      "Label": "IdentityServerUrl",
+      "Name": "IdentityServerUrl"
+    },
+    {
+      "Name": "IdpCertThumbprint",
+      "Label": "IdpCertThumbprint",
+      "HelpText": "IdpCertThumbprint",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "Name": "SomeTest:Variable",
+      "Label": "SomeTest:Variable",
+      "HelpText": "SomeTest:Variable",
+      "DefaultValue": "True",
+      "DisplaySettings": {
+        "Octopus.ControlType": "Checkbox"
+      }
+    },
+    {
+      "Name": "TestVarSensitive",
+      "Label": "the ultimate password",
+      "HelpText": "hide me",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "Sensitive"
+      }
+    },
+    {
+      "Name": "TestVarSingleLine",
+      "Label": "This is a test variable",
+      "HelpText": "I help you!",
+      "DefaultValue": "sdlfkkj",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "Name": "VariableFrom:Config",
+      "Label": "VariableFrom:Config",
+      "HelpText": "VariableFrom:Config",
+      "DefaultValue": "sfd\nsdfsf",
+      "DisplaySettings": {
+        "Octopus.ControlType": "MultiLineText"
+      }
+    },
+    {
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      },
+      "DefaultValue": "",
+      "HelpText": "VendorPanelApiUrl",
+      "Label": "VendorPanelApiUrl",
+      "Name": "VendorPanelApiUrl"
+    },
+    {
+      "Name": "VendorPanelWebsiteUrl",
+      "Label": "VendorPanelWebsiteUrl",
+      "HelpText": "VendorPanelWebsiteUrl",
+      "DefaultValue": "female",
+      "DisplaySettings": {
+        "Octopus.ControlType": "Select",
+        "Octopus.SelectOptions": "male|M\nfemale|F"
+      }
+    },
+    {
+      "Name": "WebApp:Certificate:CommonName",
+      "Label": "WebApp:Certificate:CommonName",
+      "HelpText": "WebApp:Certificate:CommonName",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    },
+    {
+      "Name": "Webapp:Url",
+      "Label": "Webapp:Url",
+      "HelpText": "Webapp:Url",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      }
+    }
+  ],
+  "Id": "",
+  "Name": "Teststing 123"
+}

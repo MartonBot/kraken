@@ -1,0 +1,6 @@
+{
+	"Files": [
+		"appsettings.json", // this refers to the file OctopusConfig/../appsettings.json
+		"config/my-settings.config" // OctopusConfig/../config/my-settings.config
+	]
+}
