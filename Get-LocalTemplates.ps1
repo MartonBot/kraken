@@ -6,4 +6,4 @@ $octopusProjectFileName = "octopus-project.json"
 $octopusProject = Get-Content -Path "./$octopusProjectFileName" | ConvertFrom-Json
 
 # get the variable templates for the project
-return $octopusProject.Templates | Select-Object -ExpandProperty Name
+return $octopusProject.Templates

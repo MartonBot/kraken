@@ -24,7 +24,7 @@ process {
     }
     
     if ($existingTemplateNames -contains $TemplateName) {
-        Write-Host "The $TemplateName template already exists, skipping."
+        Write-Verbose "The $TemplateName template already exists, skipping."
     }
     else {
         Write-Host "Adding $TemplateName to the project templates." -ForegroundColor DarkGreen

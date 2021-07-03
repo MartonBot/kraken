@@ -57,27 +57,25 @@ $configFileKey = "Config files"
 
 # get template lists for the local project, the server, and the config files
 $substitutions = @(& $PSScriptRoot\Get-Substitutions.ps1 | Select-Object -ExpandProperty Name -Unique)
-$localTemplates = @(& $PSScriptRoot\Get-LocalTemplates.ps1)
-$serverTemplates = @(& $PSScriptRoot\Get-ServerTemplates.ps1)
+$localTemplates = @(& $PSScriptRoot\Get-LocalTemplates.ps1) | Select-Object -ExpandProperty Name
+$serverTemplates = @(& $PSScriptRoot\Get-ServerTemplates.ps1) | Select-Object -ExpandProperty Name
 
 # create an empty array to store the summary
 $summary = @()
-
-Write-Host "summary type = $($summary.GetType())"
 
 # enrich the summary with data from the local project, the server, and the config files
 $summary = Update-Summary -TemplateList $localTemplates -Summary $summary -Key $localProjectKey
 $summary = Update-Summary -TemplateList $serverTemplates -Summary $summary -Key $serverProjectKey
 $summary = Update-Summary -TemplateList $substitutions -Summary $summary -Key $configFileKey
 
-
-
-
 # output some information
-Write-Host "Project: $($project.Name)"
-Write-Host "Environments:"
-$project.Environments
-Write-Host "Tenants:"
-$project.Tenants | Select-Object -ExpandProperty Name
-Write-Host "Variable templates:"
-$summary | Format-Table
+Write-Output "Project: $($project.Name)"
+
+Write-Output "Environments:"
+Write-Output ($project.Environments | Format-Table)
+
+Write-Output "Tenants:"
+Write-Output ($project.Tenants | Format-Table)
+
+Write-Output "Variable templates:"
+Write-Output ($summary | Format-Table)

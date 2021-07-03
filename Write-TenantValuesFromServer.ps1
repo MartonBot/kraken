@@ -1,6 +1,11 @@
 # This script retrives the tenant values from the server and updates the local tenant value files.
 # It only updates entries for tenants, environments and templates defined in the octopus-project.json file.
 
+param (
+    [switch]
+    $WhatIf
+)
+
 $ErrorActionPreference = "Stop"
 
 $octopusProjectFileName = "octopus-project.json"
@@ -8,14 +13,7 @@ $tenantNameKey = "Tenant Name"
 
 # load the local project and get the relevant information
 $project = Get-Content -Path ".\$octopusProjectFileName" | ConvertFrom-Json
-$environmentNames = $project.Environments
-
-# get the environments from the server as an array
-$environments = @()
-foreach ($envName in $environmentNames) {
-    $env = (& $PSScriptRoot\Get-OctopusResource.ps1 -Path "api/environments?name=$envName").Items | Select-Object -Property Name, Id
-    $environments += $env
-}
+$environments = $project.Environments
 
 # get the list of tenants connected to this project
 $tenants = $project.Tenants
@@ -25,6 +23,11 @@ $localTemplates = $project.Templates
 
 # loop through each environment targeted by the project
 foreach ($env in $environments) {
+
+    # verify that the environment is valid
+    if ($null -eq $env.Id) {
+        Write-Error "Environment $($env.Name) has no Id set. Use kraken pull project to set it."
+    }
     
     Write-Verbose "Updating local values from server values for environment $($env.Name)."
 
@@ -78,10 +81,10 @@ foreach ($env in $environments) {
             }
             else {
                 # output the update info
-                Write-Host "[$($env.Name)]`t" -ForegroundColor Yellow -NoNewline
-                Write-Host "$($localTemplate.Name):`t" -NoNewline
-                Write-Host "'$localValue'`t" -ForegroundColor DarkRed -NoNewline
-                Write-Host "<- `t" -NoNewline
+                Write-Host "[$($env.Name)] " -ForegroundColor Yellow -NoNewline
+                Write-Host "$($localTemplate.Name): " -NoNewline
+                Write-Host "'$localValue' " -ForegroundColor DarkRed -NoNewline
+                Write-Host "<- " -NoNewline
                 Write-Host "'$serverValue'" -ForegroundColor DarkGreen
 
                 # perform the update
@@ -93,6 +96,12 @@ foreach ($env in $environments) {
     }
 
     # write the updated tenant values to the file
-    $localTenantValues | ConvertTo-Json -Depth 5 | Set-Content -Path "./$tenantValueFileName"
+    if (!$WhatIf.IsPresent) {
+        Write-Host "Updated $tenantValueFileName file with values from the server." -ForegroundColor Blue
+        $localTenantValues | ConvertTo-Json -Depth 5 | Set-Content -Path "./$tenantValueFileName"
+    }
+    else {
+        Write-Host "$tenantValueFileName was not updated."
+    }
 
 }

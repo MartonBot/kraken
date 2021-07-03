@@ -13,4 +13,4 @@ if ([string]::IsNullOrWhiteSpace($project.Id)) {
 # get the project from the server
 $serverProject = & $PSScriptRoot\Get-OctopusResource.ps1 -Path "api/projects/$($project.Id)"
 
-return $serverProject.Templates | Select-Object -ExpandProperty Name
+return $serverProject.Templates | Select-Object -ExcludeProperty Id

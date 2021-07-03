@@ -1,7 +1,9 @@
 Param (
     [Parameter(Mandatory)]
     [string]
-    $Path
+    $Path,
+    [Parameter(Mandatory)]
+    $Resource
 )
 
 $apikeyVariableName = 'OCTOPUS_CLI_API_KEY'
@@ -13,11 +15,11 @@ try {
     $octopusBaseUrl = $(Get-ChildItem -Path "Env:\$octopusUrlVariableName")[0].Value
 }
 catch {
-    Write-Error "To query an Octopus resource, you must set both environment variables OCTOPUS_CLI_API_KEY (e.g. API-XXXXXXX) and OCTOPUS_CLI_SERVER (e.g. https://octopus.vendorpanel.com.au)."
+    Write-Error "To set an Octopus resource, you must set both environment variables OCTOPUS_CLI_API_KEY (e.g. API-XXXXXXX) and OCTOPUS_CLI_SERVER (e.g. https://octopus.vendorpanel.com.au)."
 }
 
 # Octopus API key header
 $headers = @{ "X-Octopus-ApiKey" = $apiKey }
 
-Write-Verbose "Querying Octopus resource $Path."
-return Invoke-RestMethod -Method Get -Uri "$octopusBaseUrl/$Path" -Headers $headers
+Write-Verbose "Writing to Octopus resource $Path."
+return Invoke-RestMethod -Method Put -Uri "$octopusBaseUrl/$Path" -Headers $headers -Body ($Resource | ConvertTo-Json -Depth 10) | Out-Null

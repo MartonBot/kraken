@@ -155,7 +155,8 @@
       "HelpText": "WebApp:Certificate:CommonName",
       "DefaultValue": "",
       "DisplaySettings": {
-        "Octopus.ControlType": "SingleLineText"
+        "Octopus.ControlType": "Select",
+        "Octopus.SelectOptions": "boy|M\ngirl|F"
       }
     },
     {
@@ -168,6 +169,6 @@
       }
     }
   ],
-  "Id": "",
-  "Name": "Teststing 123"
+  "Name": "Testing Testing 123",
+  "Id": "Projects-621"
 }

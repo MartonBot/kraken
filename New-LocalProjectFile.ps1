@@ -17,16 +17,16 @@ if (!(Test-Path -Path "./$octopusProjectFileName" -PathType Leaf)) {
         $ProjectName = "New Project"
     }
 
-    $octopusProject = @{
+    $octopusProject = [ordered]@{
         "Name"         = $ProjectName
         "Id"           = ""
-        "Templates"    = @()
+        "Environments" = @()
         "Tenants"      = @()
-        "Environments" = @("Green", "Blue", "Red")
+        "Templates"    = @()
     }
     $octopusProject | ConvertTo-Json | Out-File "./$octopusProjectFileName"
 
-    Write-Host "A new $octopusProjectFileName has been created in the current directory, please edit the name of the project and the connected environments." -ForegroundColor DarkGreen
+    Write-Host "A new $octopusProjectFileName has been created in the current directory, please edit the name of the project." -ForegroundColor DarkGreen
 
 }
 else {

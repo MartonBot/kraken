@@ -1,8 +1,7 @@
-# If there is no octopus-project.json file, this file will create and populate it with variable templates from the server
+# If there is no octopus-project.json file, this file will create and populate it with general details (Id and connected tenants) from the server
 
 Param(
-    [string]
-    $ProjectName
+
 )
 
 $ErrorActionPreference = "Stop"
@@ -17,10 +16,6 @@ if (!(Test-Path -Path "./$octopusProjectFileName" -PathType Leaf)) {
 # get the local project
 $localProject = Get-Content -Path "./$octopusProjectFileName" | ConvertFrom-Json
 
-# verify that the project name matches if it has been provided
-if (![string]::IsNullOrWhitespace($ProjectName) -and $ProjectName -ne $localProject.Name) {
-    Write-Error "The supplied project name $ProjectName does not match the name in the $octopusProjectFileName file $($localProject.Name)."
-}
 $projectName = $localProject.Name
 
 # get the project from the server
@@ -34,34 +29,37 @@ if ($null -eq$serverProject) {
 # get the project Id
 $projectId = $serverProject.Id
 
-# create a list of templates to add locally
-$newTemplates = @()
+# create a list of environments to add locally
+$newEnvironments = @()
 
-# get the local templates
-$localTemplates = $localProject.Templates
-$existingLocalTemplateNames = $localTemplates | Select-Object -ExpandProperty Name
+# get the local environments, we want to keep them even if they don't exist on the server
+$localEnvironments = @($localProject.Environments)
+$existingLocalEnvironmentNames = $localEnvironments | Select-Object -ExpandProperty Name
 
-# get the server templates
-$serverTemplates = $serverProject.Templates
-Write-Verbose "Found $($serverTemplates.Count) variable templates on the server."
+# get the lifecycle for the project and the environment Ids associated to its first phase
+$lifecycle = & $PSScriptRoot\Get-OctopusResource.ps1 -Path "api/lifecycles/$($serverProject.LifecycleId)"
+$environmentIds = $lifecycle.Phases[0].OptionalDeploymentTargets
 
-# write the server templates that do not exist locally
-foreach ($serverTemplate in $serverTemplates) {
-    if ($existingLocalTemplateNames -contains $serverTemplate.Name) {
-        Write-Verbose "The local project already contains the $($serverTemplate.Name) template, skipping."
+# retrieve the environments that are associated to the project on the server
+$serverEnvironments = @((& $PSScriptRoot\Get-OctopusResource.ps1 -Path "api/environments?skip=0&take=10000").Items | ? { $environmentIds -contains $_.Id } | Select-Object -Property Name, Id)
+Write-Verbose "Found $($serverEnvironments.Count) associated environments on the server."
+
+# write the server environments that do not exist locally
+$serverEnvironments | ForEach-Object {
+    if ($existingLocalEnvironmentNames -contains $_.Name) {
+        Write-Verbose "The local project is already associated to the $($_.Name) environments, skipping."
     }
     else {
-        Write-Host "Adding server template $($serverTemplate.Name) to local project." -ForegroundColor DarkGreen
-        $serverTemplate.PSObject.Properties.Remove('Id')
-        $newTemplates += $serverTemplate
+        Write-Host "Adding $($_.Name) environment to local project." -ForegroundColor DarkGreen
+        $newEnvironments += $_
     }
 }
 
 # create a list of connected tenants to add locally
 $newConnectedTenants = @()
 
-# get the local connected tenants
-$localConnectedTenants = $localProject.Tenants
+# get the local connected tenants, we want to keep them even if they don't exist on the server
+$localConnectedTenants = @($localProject.Tenants)
 $existingLocalTenantNames = $localConnectedTenants | Select-Object -ExpandProperty Name
 
 # get the connected tenants from the server
@@ -81,8 +79,8 @@ $serverConnectedTenants | ForEach-Object {
 
 # set the local values
 $localProject.Id = $serverProject.Id
-$localProject.Templates = $localTemplates + $newTemplates | Sort-Object -Property Name
 $localProject.Tenants = $localConnectedTenants + $newConnectedTenants | Sort-Object -Property Name
+$localProject.Environments = $localEnvironments + $newEnvironments | Sort-Object -Property Name
 
 # write to the project file
 $localProject | ConvertTo-Json -Depth 5 | Set-Content -Path "./$octopusProjectFileName"

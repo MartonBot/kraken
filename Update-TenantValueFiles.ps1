@@ -75,7 +75,7 @@ $variableTemplates = $octopusProject.Templates | Select-Object -ExpandProperty N
 
 # get all tenants and environments from the project file
 $connectedTenants = $octopusProject.Tenants | Select-Object -ExpandProperty Name
-$environments = $octopusProject.Environments
+$environments = $octopusProject.Environments | Select-Object -ExpandProperty Name
 
 # create or update the tenant value files
 foreach ($environment in $environments) {
